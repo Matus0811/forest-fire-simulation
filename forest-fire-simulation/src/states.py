@@ -1,0 +1,5 @@
+EMPTY = 0 
+TREE = 1
+BURNING = 2
+BURNED = 3
+WATER = 4
