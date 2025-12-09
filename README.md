@@ -103,6 +103,6 @@ It implements concepts such as cellular automata, probabilistic transitions, and
 
 ## 👤 Author
 
-Kamil Matus  
+Kamil Matusiak 
 Forest Fire Simulation — 2025/2026
 
