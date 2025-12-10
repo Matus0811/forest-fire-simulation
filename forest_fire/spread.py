@@ -7,7 +7,7 @@ Contains the function responsible for simulating how fire spreads within the for
 import numpy as np
 from .states import TREE, BURNING, BURNED
 
-def spread_fire(forest, burned_age, ignition_prob=1.0, wind_direction = None):
+def spread_fire(forest, burned_age, ignition_prob=0.5, wind_direction = None):
 
     # Step 1: Identify burning cells
     burning_mask = (forest == BURNING)
@@ -57,15 +57,47 @@ def spread_fire(forest, burned_age, ignition_prob=1.0, wind_direction = None):
             }
         }
         
+        with_wind = ignition_prob * 2
+        against_wind = ignition_prob *0.5
+        neutral_wind = ignition_prob
     
     # Step 4: Determine spontaneous ignition (self-ignition ps) 
-    
 
     # Step 5: Determine which TREE cells ignite 
     tree_mask = (forest == TREE)
     candidate_mask = tree_mask & burning_neighbors
+    local_p = np.zeros_like(forest)
+       
+    if wind_direction is not None:
+        direction_masks = {
+            "up": up,
+            "down": down,
+            "left": left,
+            "right": right,
+            "up_left": up_left,
+            "up_right": up_right,
+            "down_left": down_left,
+            "down_right": down_right
+        }
+        
+        wind_groups = wind_map[wind_direction]
+        
+        for d in wind_groups["with"]:
+            mask = direction_masks[d]
+            local_p[mask & candidate_mask] = with_wind
+            
+        for d in wind_groups["neutral"]:
+            mask = direction_masks[d]
+            local_p[(mask & candidate_mask) & local_p==0] = neutral_wind
+        
+        for d in wind_groups["against"]:
+            mask = direction_masks[d]
+            local_p[(mask & candidate_mask) & local_p==0] = against_wind
+    else:
+        local_p[candidate_mask] = ignition_prob
+            
     random_values = np.random.random(forest.shape)
-    random_mask = (random_values < ignition_prob)
+    random_mask = (random_values < local_p)
     ignition_mask = candidate_mask & random_mask
     forest_next = forest.copy()
     forest_next[ignition_mask] = BURNING
