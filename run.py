@@ -1,28 +1,29 @@
 """
 run.py
 
-Simple test runner for the forest fire simulation.
-Tests full simulation loop with wind, spontaneous ignition
-and termination condition.
+Main entry point for the forest fire simulation project.
+Runs the simulation with selected parameters and saves
+the visualization of the results as an animation file.
 """
 
 from forest_fire.simulate import simulate_fire
+from forest_fire.visualize import save_simulation_animation
 
 
 def main():
-    # --- Simulation parameters ---
-    size = (10, 10)
+    # --- Simulation configuration ---
+    size = (50, 50)
     tree_density = 0.6
     water_density = 0.05
 
     ignition_prob = 0.5
-    wind_direction = "N"      # try: "N", "S", "E", "W", None
-    ps = 1e-2                 # higher than normal to SEE spontaneous fires
-    regrowth_time = 3
-    quiet_steps_limit = 5     # short silence window for testing
-    seed = 1
+    wind_direction = "N"      # "N", "S", "E", "W" or None
+    ps = 1e-4                 # spontaneous ignition probability
+    regrowth_time = 10
+    quiet_steps_limit = 10
+    seed = 42
 
-    # --- Run full simulation ---
+    # --- Run simulation ---
     frames = simulate_fire(
         size=size,
         tree_density=tree_density,
@@ -35,17 +36,13 @@ def main():
         quiet_steps_limit=quiet_steps_limit
     )
 
-    # --- Print results ---
-    print(f"Simulation finished after {len(frames) - 1} steps")
-    print("-" * 40)
+    # --- Save visualization ---
+    output_path = "outputs/forest_fire_simulation.gif"
+    save_simulation_animation(frames, output_path, fps=8)
 
-    print("Initial forest:")
-    print(frames[0])
-    print("-" * 40)
-
-    print("Final forest:")
-    print(frames[-1])
-    print("-" * 40)
+    print("Simulation completed successfully.")
+    print(f"Total iterations: {len(frames) - 1}")
+    print(f"Visualization saved to: {output_path}")
 
 
 if __name__ == "__main__":
