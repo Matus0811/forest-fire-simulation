@@ -22,9 +22,10 @@ def main():
     regrowth_time = 10
     quiet_steps_limit = 10
     seed = 42
+    wind_change_interval = 5
 
     # --- Run simulation ---
-    frames = simulate_fire(
+    frames, winds = simulate_fire(
         size=size,
         tree_density=tree_density,
         water_density=water_density,
@@ -33,12 +34,13 @@ def main():
         ps=ps,
         regrowth_time=regrowth_time,
         seed=seed,
-        quiet_steps_limit=quiet_steps_limit
+        quiet_steps_limit=quiet_steps_limit,
+        wind_change_interval=wind_change_interval
     )
 
     # --- Save visualization ---
     output_path = "outputs/forest_fire_simulation.gif"
-    save_simulation_animation(frames, output_path, fps=8)
+    save_simulation_animation(frames, winds, output_path, fps=8)
 
     print("Simulation completed successfully.")
     print(f"Total iterations: {len(frames) - 1}")

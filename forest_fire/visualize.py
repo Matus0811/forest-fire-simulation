@@ -12,16 +12,15 @@ from matplotlib.animation import FuncAnimation, PillowWriter
 from .states import EMPTY, TREE, BURNING, BURNED, WATER
 
 
-def save_simulation_animation(frames, output_path, fps=10):
+def save_simulation_animation(frames, winds, output_path, fps=10):
     # Step 1: Prepare color map for forest states
     colors = [
-    "#c2b280",  
-    "#1b7f1b",  
-    "#d32f2f",  
-    "#424242",  
-    "#1565c0"   
-]
-
+        "#c2b280",  # EMPTY
+        "#1b7f1b",  # TREE
+        "#d32f2f",  # BURNING
+        "#424242",  # BURNED
+        "#1565c0"   # WATER
+    ]   
     cmap = lc(colors)
 
     # Step 2: Create matplotlib figure and axis
@@ -35,7 +34,8 @@ def save_simulation_animation(frames, output_path, fps=10):
     # Step 4: Define update function for animation
     def update(i):
         img.set_data(frames[i])
-        ax.set_title(f"Iteration {i}")
+        ax.set_title(f"Iteration {i} | Wind: {winds[i]}")
+
         return [img]
 
     # Step 5: Create animation and save to file
