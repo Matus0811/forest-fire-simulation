@@ -1,5 +1,7 @@
 # 🌲 Forest Fire Simulation
 
+[:poland: Polish version](README_PL.md)
+
 A Python-based forest fire simulation built as part of a university project in **Computer Simulations**.
 The simulation models how fire spreads across a 2D forest grid using probabilistic rules, cellular automata techniques, and dynamic environmental factors such as wind and vegetation regrowth.
 
